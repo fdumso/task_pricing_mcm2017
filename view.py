@@ -33,9 +33,17 @@ if __name__ == '__main__':
             prefix="fa",
             icon="circle"
         )
+        popup = Popup(
+            html="P: ({},{})<br>"
+                 "$: {}".format(
+                t.latitude,
+                t.longitude,
+                t.price
+            ))
         folium.Marker(
             location=[t.latitude, t.longitude],
-            icon=icon
+            icon=icon,
+            popup=popup
         ).add_to(geo_map)
     # for t in new_tasks:
     #     icon = Icon(
@@ -54,7 +62,17 @@ if __name__ == '__main__':
                 prefix="fa",
                 icon="user"
             )
-            popup = Popup(html="<span>{}</span>".format(u.credit))
+            popup = Popup(
+                html="P: ({},{})<br>"
+                     "C: {}<br>"
+                     "T: {}<br>"
+                     "Q: {}".format(
+                        u.latitude,
+                        u.longitude,
+                        u.credit,
+                        u.book_start_time,
+                        u.book_quantity_limit
+                    ))
             folium.Marker(
                 location=[u.latitude, u.longitude],
                 icon=icon,
