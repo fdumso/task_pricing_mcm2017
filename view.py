@@ -5,7 +5,7 @@
     To view the distribution of data over geographic plane
 """
 import folium
-from folium import Icon
+from folium import Icon, Popup
 
 import dataset
 
@@ -47,17 +47,19 @@ if __name__ == '__main__':
     #         location=[t.latitude, t.longitude],
     #         icon=icon
     #     ).add_to(geo_map)
-    # for u in users:
-    #     if min_lat < u.latitude < max_lat and min_lon < u.longitude < max_lon:
-    #         icon = Icon(
-    #             color="blue",
-    #             prefix="fa",
-    #             icon="user"
-    #         )
-    #         folium.Marker(
-    #             location=[u.latitude, u.longitude],
-    #             icon=icon
-    #         ).add_to(geo_map)
+    for u in users:
+        if min_lat < u.latitude < max_lat and min_lon < u.longitude < max_lon:
+            icon = Icon(
+                color="blue",
+                prefix="fa",
+                icon="user"
+            )
+            popup = Popup(html="<span>{}</span>".format(u.credit))
+            folium.Marker(
+                location=[u.latitude, u.longitude],
+                icon=icon,
+                popup=popup
+            ).add_to(geo_map)
 
     geo_map.save(OLD_TASKS_MAP_FILENAME)
 
