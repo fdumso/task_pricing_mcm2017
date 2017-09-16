@@ -34,16 +34,30 @@ def quadTreeInsert(tree, node):
 
 def buildQuadTree(data):
     tree = None
-    for task in shuffle(data):
-        tree = quadTreeInsert(tree, QuadNode((task.latitude, task.longitude)))
+    shuffle(data)
+    for task in data:
+        quadTreeInsert(tree, QuadNode((task.latitude, task.longitude)))
     return tree
 
 
 def queryRange(tree, lower, upper):
     if not tree:
         return []
-    return []
+    if tree.key[0] < lower.key[0]:
+        explore = set([tree.c3, tree.c4])
+    elif tree.key[0] < lower.key[1]:
+        explore = set([tree.c1, tree.c2, tree.c3, tree.c4])
+    else:
+        explore = set([tree.c1, tree.c2])
 
+    (lo, hi) = (lower[1], upper[1])
+    (lo, hi) = min((lo, hi), (hi, lo))
+    if tree.key[1] < lo:
+        explore
+    elif tree.key[1] < hi:
+        pass
+    else:
+        pass
 
 # returns the index of the nearest user
 def nearestUser(task, users):
