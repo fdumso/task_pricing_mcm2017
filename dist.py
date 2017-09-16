@@ -42,23 +42,32 @@ def buildQuadTree(data):
 
 
 def queryRange(tree, lower, upper):
-    if not tree:
-        return []
-    if tree.key[0] < lower.key[0]:
-        explore = set([tree.c3, tree.c4])
-    elif tree.key[0] < lower.key[1]:
-        explore = set([tree.c1, tree.c2, tree.c3, tree.c4])
-    else:
-        explore = set([tree.c1, tree.c2])
+    if tree:
+        cond1 = cond2 = False
+        if tree.key[0] < lower[0]:
+            explore = set([tree.c3, tree.c4])
+        elif tree.key[0] < upper[0]:
+            cond1 = True
+            explore = set([tree.c1, tree.c2, tree.c3, tree.c4])
+        else:
+            explore = set([tree.c1, tree.c2])
 
-    (lo, hi) = (lower[1], upper[1])
-    (lo, hi) = min((lo, hi), (hi, lo))
-    if tree.key[1] < lo:
-        explore
-    elif tree.key[1] < hi:
-        pass
-    else:
-        pass
+        (lo, hi) = (lower[1], upper[1])
+        (lo, hi) = min((lo, hi), (hi, lo))
+
+        if tree.key[1] < lo:
+            explore = explore.intersection([tree.c2, tree.c4])
+        elif tree.key[1] < hi:
+            cond2 = True
+            explore = explore.intersection([tree.c1, tree.c2, tree.c3, tree.c4])
+        else:
+            explore = explore.intersection([tree.c1, tree.c3])
+
+        if cond1 and cond2:
+            yield tree
+        for subtree in explore:
+            for el in queryRange(subtree, lower, upper):
+                yield el
 
 # returns the index of the nearest user
 def nearestUser(task, users):
